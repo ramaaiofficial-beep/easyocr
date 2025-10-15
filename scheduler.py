@@ -5,6 +5,10 @@ from datetime import datetime
 from twilio.rest import Client
 import re
 import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Twilio Configuration
 TWILIO_SID = os.getenv("TWILIO_SID")
@@ -13,9 +17,11 @@ FROM_NUM = os.getenv("FROM_NUM")
 TO_NUM = os.getenv("TO_NUM")
 
 if not all([TWILIO_SID, TWILIO_AUTH_TOKEN, FROM_NUM, TO_NUM]):
-    raise ValueError("All Twilio environment variables are required: TWILIO_SID, TWILIO_AUTH_TOKEN, FROM_NUM, TO_NUM")
-
-twilio_client = Client(TWILIO_SID, TWILIO_AUTH_TOKEN)
+    print("⚠️ Warning: Twilio environment variables not found. SMS functionality will be disabled.")
+    print("Please set: TWILIO_SID, TWILIO_AUTH_TOKEN, FROM_NUM, TO_NUM")
+    twilio_client = None
+else:
+    twilio_client = Client(TWILIO_SID, TWILIO_AUTH_TOKEN)
 
 # Scheduler flags
 stop_flag = threading.Event()
@@ -31,6 +37,11 @@ SLOTS = {"morning": "08:00", "afternoon": "14:02", "night": "20:43"}
 def send_sms(med):
     message = f"Reminder: Take {med['name']} - {med['dosage']}"
     print(f"📲 Trying to send SMS: {message}")
+    
+    if twilio_client is None:
+        print(f"⚠️ SMS not sent (Twilio not configured): {message}")
+        return
+        
     try:
         twilio_client.messages.create(
             body=message,

@@ -1,10 +1,16 @@
 import easyocr
 from openai import OpenAI
 import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 if not OPENAI_API_KEY:
-    raise ValueError("OPENAI_API_KEY environment variable is required")
+    print("⚠️ Warning: OPENAI_API_KEY not found. Please set it as an environment variable or in .env file")
+    # For development, you can set a default or handle gracefully
+    OPENAI_API_KEY = "your-api-key-here"
 
 client = OpenAI(api_key=OPENAI_API_KEY)
 reader = easyocr.Reader(['en'])
