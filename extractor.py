@@ -3,8 +3,8 @@ from openai import OpenAI
 import os
 from dotenv import load_dotenv
 
-# Load environment variables from .env file
-load_dotenv()
+# Load environment variables from .env file with explicit UTF-8
+load_dotenv(encoding="utf-8")
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 if not OPENAI_API_KEY:

@@ -7,8 +7,8 @@ import re
 import os
 from dotenv import load_dotenv
 
-# Load environment variables from .env file
-load_dotenv()
+# Load environment variables from .env file with explicit UTF-8
+load_dotenv(encoding="utf-8")
 
 # Twilio Configuration
 TWILIO_SID = os.getenv("TWILIO_SID")
