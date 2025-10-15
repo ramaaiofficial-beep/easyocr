@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: easyocr-nlp-app
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: TWILIO_SID
+        sync: false
+      - key: TWILIO_AUTH_TOKEN
+        sync: false
+      - key: FROM_NUM
+        sync: false
+      - key: TO_NUM
+        sync: false
